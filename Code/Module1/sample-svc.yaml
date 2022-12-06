@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-svc
+spec:
+  ports:
+    - port: 80
+  selector:
+    sample: color
+  type: LoadBalancer

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ng-dep
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      target: dev
+  template:
+    metadata:
+      name: ng-pod
+      labels:
+        target: dev
+    spec:
+      nodeSelector:
+        kubernetes.io/os: linux
+      containers:
+      - name: nginx
+        image: k8slab/nginx:1.0
+        ports:
+        - containerPort: 80
+          protocol: TCP
+
+
