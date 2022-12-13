@@ -123,9 +123,12 @@ For example:
 
 ![](content/image-app-final.png)
 
+***CONGRATULATIONS!***  you have successfully installed an Ingress Controller and setup routing rules for your application running in Azure Kubernetes Service. 
+
+
 
 ## Cleanup
-When finished, delete the application and Ingress resrouce from your AKS Cluster
+When finished, delete the application and Ingress resource from your AKS Cluster
 
 ```bash
 kubectl delete -f blue-deploy.yaml -f red-deploy.yaml -f ingress.yaml
