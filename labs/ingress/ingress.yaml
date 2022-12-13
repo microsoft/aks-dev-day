@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  name: ingress-demo
+spec:
+  ingressClassName: nginx
+  rules:
+  ##Change to the fqdn of the ingress controller
+  - host: "[Replace]"
+    http:
+      paths:
+      - path: /blue(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service: 
+            name: blue-svc
+            port: 
+              number: 80
+      - path: /red(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service: 
+            name: red-svc
+            port: 
+              number: 80
+
