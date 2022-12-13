@@ -6,7 +6,8 @@ Instructions to setup the environment and AKS cluster for the labs
 ## Task 1
 In this exercise you log into your Azure Subscription and launch the Bash [Azure Cloud Shell](https://docs.microsoft.com/en-us/azure/cloud-shell/overview). The Azure Cloud Shell will give you a Linux shell prompt with all the required software installed and configured.  
 
-1. [Launch Cloud Shell](https://shell.azure.com)  (https://shell.azure.com)
+1. [Launch Cloud Shell](https://shell.azure.com/bash) 
+
 1. When prompted, Log into your Azure Subscription 
 1. If this is your first time launching the Azure Cloud Shell, you will need to create a storage account. 
 
@@ -32,10 +33,12 @@ In this task you will create the AKS Cluster that you will use for the labs in t
     az group create -n $rg --location eastus
     ```
 
-1. Save this information for later 
+1. Closing the cloud shell will remove the **aks_name** and **rg** variables. Save the output of the following command to restore the variables needed in later labs.
     ```bash
     echo "aks_name="$aks_name;echo "rg="$rg
     ```
+![](content/image-variables.png)
+
 
 1. Create the AKS Cluster
 
@@ -48,11 +51,9 @@ In this task you will create the AKS Cluster that you will use for the labs in t
         --resource-group $rg
     ```
 
-    <div style="border-radius: 25px; background: lightgreen; padding: 20px; margin: 15px 0 15px 0" > 
-
-    <div><b>NOTE:</div>
+    > ![](content/idea.png) NOTE:</br>
     This can take several minutes to complete 
-    </b></div>    
+
 
 1. Add a User Node Pool. This will create a set of nodes dedicated to running user deployments 
 
@@ -65,7 +66,7 @@ In this task you will create the AKS Cluster that you will use for the labs in t
     --mode User
     ```
 
-1. Configure System Node to host *only* system workloads.
+1. Configure the system node pool to host *only* system workloads.
 
     ```bash
     az aks nodepool update \
