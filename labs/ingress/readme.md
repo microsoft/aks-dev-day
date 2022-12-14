@@ -1,6 +1,9 @@
 # Lab: Ingress 
-In this lab you will install an Ingress Controller. a multi-tier application and Ingress rules to route Internet traffic to one of the the application services. There are many choices available for Kubernetes Ingress Controllers but in this lab you will install the NGINX controller Community Edition. 
 
+In this lab you will:
+1. Create a static IP Address and assign a DNS label to it
+1. Install an Ingress Controller and assign the static IP address
+1. Deploy a multi-tier application and Ingress rules to route Internet traffic to one of the the application services. 
 
 > ![](content/idea.png) NOTE</br>
 There are two open source ingress controllers for Kubernetes based on Nginx: one is maintained by the Kubernetes community [kubernetes/ingress-nginx](https://github.com/kubernetes/ingress-nginx), and one is maintained by NGINX, Inc. [nginxinc/kubernetes-ingress](https://github.com/nginxinc/kubernetes-ingress). This Lab will be using the Kubernetes community ingress controller.
@@ -23,7 +26,12 @@ ip_name=$aks_name"-ip"
 
 Create the  public IP Address
 ```bash
-az network public-ip create -g $ip_rg -n $ip_name --dns-name $ingress_dns --allocation-method Static --sku Standard --query dnsSettings.fqdn
+az network public-ip create -g $ip_rg \
+  -n $ip_name \
+  --dns-name $ingress_dns \
+  --allocation-method Static \
+  --sku Standard \
+  --query dnsSettings.fqdn
 ```
 Get the IP Address to assign to the Ingress Controller
 ``` bash
