@@ -3,7 +3,7 @@ Instructions to setup the environment and AKS cluster for the labs
 
 >Duration 20 minutes
 
-## Task 1
+## Task 1: Setup Cloud Shell
 In this exercise you log into your Azure Subscription and launch the Bash [Azure Cloud Shell](https://docs.microsoft.com/en-us/azure/cloud-shell/overview). The Azure Cloud Shell will give you a Linux shell prompt with all the required software installed and configured.  
 
 1. [Launch Cloud Shell](https://shell.azure.com/bash) 
@@ -22,8 +22,8 @@ In this exercise you log into your Azure Subscription and launch the Bash [Azure
     ![](content/image-3.png "Azure Cloud Shell Bash prompt")
     >![](content/idea.png) Use ***shift+insert*** to paste the commands from this document into the cloud shell terminal
 
-## Task 2
-In this task you will create the AKS Cluster that you will use for the labs in this workshop
+## Task 2: Create Azure Container Registry 
+In this task you will create an azure container registry and later link the registry to your Kubernetes cluster to easily and securely pull images. 
 
 1. First, generate a unique name and create a resource group to organize the resources we will create in the Lab.  An Azure resource group is a logical container into which Azure resources are deployed and managed.
 
@@ -33,9 +33,31 @@ In this task you will create the AKS Cluster that you will use for the labs in t
     az group create -n $rg --location eastus
     ```
 
+>NOTE: The registry name must be globally unique, 5-50 alphanumeric characters.
+
+1. Generate a unique name for the Azure Container Registry name
+    ```bash
+    acr_name=$aks_name"acr"
+    ```
+
+1. Create the Azure Container Registry
+    ```bash
+    acr_server=$(az acr create \
+        --resource-group $rg \
+        --name $acr_name \
+        --sku Basic \
+        --query loginServer -o tsv)
+    ```
+
+
+## Task 3: Create AKS Cluster 
+In this task you will create the AKS Cluster linked to your Container Registry that you will use for the labs in this workshop
+
+
+
 1. Closing the cloud shell will remove the **aks_name** and **rg** variables. Save the output of the following command to restore the variables needed in later labs.
     ```bash
-    echo "aks_name="$aks_name;echo "rg="$rg
+    echo "aks_name="$aks_name;echo "rg="$rg;echo "acr_server="$acr_server
     ```
 ![](content/image-variables.png)
 
@@ -48,7 +70,8 @@ In this task you will create the AKS Cluster that you will use for the labs in t
         --nodepool-name systempool \
         --generate-ssh-keys \
         --name $aks_name \
-        --resource-group $rg
+        --resource-group $rg \
+        --attach-acr $acr_name
     ```
 
     > ![](content/idea.png) NOTE:</br>
