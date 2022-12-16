@@ -11,50 +11,37 @@ Charts are easy to create, version, share, and publish.
 
 To perform this Lab, you'll need:
 
-- An AKS cluster (created in previous labs)
+- An AKS cluster (created in `setup.md`)
+- An Azure Container Registry (created in `setup.md`)
 - Azure CLI installed (Check with `az version`)
 - [Helm v3 installed](https://helm.sh/docs/intro/install/) (Check with `helm version`)
 - git client (Check with `git version`)
 
 ## Steps
 
-### Create an Azure Container Registry
-
-For this lab, you will store the application image in an Azure Container Registry, then pull this image from the AKS cluster when deploying with Helm.
-
-The registry name must be globally unique, 5-50 alphanumeric characters.
-
-```cmd
-az acr create --resource-group rg-use-azint-aks-devdays --name acruseaksdevdays --sku Basic
-```
-
-In the output, take note of the login server. We will need it later.
-From above, the login server is: `"loginServer": "acruseaksdevdays.azurecr.io",`
-
-To ensure that the AKS cluster will be able to use this ACR, especially if Azure AD RBAC is used, run this command:
-
-```cmd
-az aks update -n aks-use-azint-aks-devdays -g rg-use-azint-aks-devdays --attach-acr acruseaksdevdays
-```
-
 ### Prepare the application
 
 We will clone the application locally and use the ACR to create and store its image:
 
-```cmd
-cd <any folder that works for you>
+```bash
+helmlab="helm-lab"
+mkdir "clouddrive/$helmlab" && cd "$_"
 git clone https://github.com/Azure-Samples/azure-voting-app-redis.git
 cd azure-voting-app-redis/azure-vote/
-dir
+ls -l
 ```
 
-Verify you see a file named `Dockerfile`.
+Verify you see a file named `Dockerfile`:
+
+![Dockerfile](content/Helm1.jpg)
 
 We use the file to build the application image:
 
-```cmd
-az acr build --image azure-vote-front:v1 --registry acruseaksdevdays --file Dockerfile .
+```bash
+az acr build --image azure-vote-front:v1 --registry $acr_server --file Dockerfile .
 ```
+
+![Dockerfile](content/Helm2.jpg)
 
 That shows you the ACR can be used directly to build images. It's a simpler process than building them locally, tagging them, and pushing them to an ACR.
 Additionally, an ACR can import and manage Helm charts. For more information, see [Push and pull Helm charts to an Azure container registry](https://learn.microsoft.com/en-us/azure/container-registry/container-registry-helm-repos).
@@ -63,12 +50,23 @@ Additionally, an ACR can import and manage Helm charts. For more information, se
 
 Generate the Helm chart for the app with:
 
-```cmd
+```bash
 helm create azure-vote-front
 ```
 
+![Helm created](content/Helm3.jpg)
+
 This command creates a `azure-vote-front` folder with the Helm chart in it.
-Go in it and look at the content structure ([The Chart File Structure](https://helm.sh/docs/topics/charts/#the-chart-file-structure)), as a chart is organized as a collection of files inside of a directory:
+
+Open the editor:
+
+![Open editor](content/Helm4.jpg)
+
+Go in the folder `` and look at the content structure ([The Chart File Structure](https://helm.sh/docs/topics/charts/#the-chart-file-structure)).
+
+![Chart structure](content/Helm5.jpg)
+
+A Helm chart is organized as a collection of files inside of directories:
 
 File | Comment | Reference
 ---------|----------|----------
@@ -83,69 +81,66 @@ You will see the mix of Kubernetes YAML declarations, and sections surrounded by
 
 ### Adapt the Helm chart
 
-- Update the `Chart.yaml` to add a dependency on the `redis` chart, by adding this declaration:
-
-```yaml
-dependencies:
-  - name: redis
-    version: 17.3.14
-    repository: https://charts.bitnami.com/bitnami
-```
-
-Save the file and run:
-
-`helm dependency update azure-vote-front`
-
-Success looks like:
-
-```cmd
-Getting updates for unmanaged Helm repositories...
-...Successfully got an update from the "https://charts.bitnami.com/bitnami" chart repository
-Saving 1 charts
-Downloading redis from repo https://charts.bitnami.com/bitnami
-```
-
-Additionally, you will see a `redis-17.3.14.tgz` file added to the `charts/` folder.
-
-- Update the `values.yaml` to set the defaults for the chart:
-
-  - Replace the default section:
-
-    FROM:
+1. Update the `Chart.yaml` to add a dependency on the `redis` chart, by adding this declaration:
 
     ```yaml
-    replicaCount: 1
-
-    image:
-      repository: nginx
-      pullPolicy: IfNotPresent
-      # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
+    dependencies:
+      - name: redis
+        version: 17.3.14
+        repository: https://charts.bitnami.com/bitnami
     ```
 
-    TO:
+    Save the file and run:
 
-    ```yaml
-    replicaCount: 1
-    backendName: azure-vote-backend-master
-    redis:
+    `helm dependency update azure-vote-front`
+
+    Success looks like:
+
+    ![Update dependencies](content/Helm6.jpg)
+
+    Additionally, you will see a `redis-17.3.14.tgz` file added to the `charts/` folder:
+
+    ![Added dependency](content/Helm7.jpg)
+
+2. Update the `values.yaml` to set the defaults for the chart:
+
+    - Replace the default section:
+
+      FROM:
+
+      ```yaml
+      replicaCount: 1
+
       image:
-        registry: mcr.microsoft.com
-        repository: oss/bitnami/redis
-        tag: 6.0.8
-      fullnameOverride: azure-vote-backend
-      auth:
-        enabled: false
+        repository: nginx
+        pullPolicy: IfNotPresent
+        # Overrides the image tag whose default is the chart appVersion.
+        tag: ""
+      ```
 
-    image:
-      repository: acruseaksdevdays.azurecr.io/azure-vote-front
-      pullPolicy: IfNotPresent
-      tag: "v1"
-    ```
+      TO:
 
-    **Important Note**: see that the repository for the image (`image.repository`) uses our ACR login server value noted earlier.
+      ```yaml
+      replicaCount: 1
+      backendName: azure-vote-backend-master
+      redis:
+        image:
+          registry: mcr.microsoft.com
+          repository: oss/bitnami/redis
+          tag: 6.0.8
+        fullnameOverride: azure-vote-backend
+        auth:
+          enabled: false
 
-  - Change `service.type` to LoadBalancer:
+      image:
+        repository: aksdevdays32296acr.azurecr.io/azure-vote-front
+        pullPolicy: IfNotPresent
+        tag: "v1"
+      ```
+
+      **Important Note**: see that the repository for the image (`image.repository`) uses our ACR server name: replace appropriately.
+
+    - Change `service.type` to LoadBalancer:
 
       FROM:
 
@@ -163,7 +158,8 @@ Additionally, you will see a `redis-17.3.14.tgz` file added to the `charts/` fol
         port: 80
       ```
 
-- Update the `templates/deployment.yaml` to set the redis environment variable value:
+
+3. Update the `templates/deployment.yaml` to set the redis environment variable value:
 
     FROM:
 
@@ -195,19 +191,18 @@ To test all the changes did not break the Chart, run:
 If any errors (and with YAML it's easy to have some with indentation), they will show.
 
 Success looks like:
-`1 chart(s) linted, 0 chart(s) failed`
+
+![Helm lint](content/Helm8.jpg)
 
 ### Install the Application in AKS
 
 To deploy to an AKS cluster, Helm will leverage the credentials used by `kubectl` (since v3+).
 
-Get/update the AKS cluster credentials:
+Check your access to the cluster with admin permissions:
 
-- if `kubectl.exe` is not installed:
-  `az aks install-cli`
+`kubectl get nodes`
 
-- get credentials for the AKS cluster:
-  `az aks get-credentials -n aks-use-azint-aks-devdays -g rg-use-azint-aks-devdays`
+> if the command fails, fix with AKS tools (Usually: `az aks install-cli` & `az aks get-credentials -g $rg -n $aks_name`)
 
 Install the Helm chart release:
 
@@ -215,31 +210,48 @@ Install the Helm chart release:
 
 Success looks like:
 
-```cmd
-NAME: azure-vote-front
-LAST DEPLOYED: Thu Dec  8 13:20:14 2022
-NAMESPACE: default
-STATUS: deployed
-REVISION: 1
-```
+![Helm install](content/Helm9.jpg)
 
 See the Release in the AKS Cluster:
+
 `helm list`
 
+![Helm list](content/Helm10.jpg)
+
 See the deployment of the Application in AKS:
+
 `kubectl get all`
+
+![Helm list](content/Helm11.jpg)
 
 Check the application is operational:
 
-- run `kubectl get svc` to obtain the `EXTERNAL-IP` of the service `azure-vote-front`
+- run
+
+  `kubectl get svc`
+  
+  to obtain the `EXTERNAL-IP` of the service `azure-vote-front`
+
+    ![External IP](content/Helm12.jpg)
+
 - Browse to the IP with `http://<EXTERNAL-IP>`, until the `"Azure Voting App"` appears
-- if `Cats` and `Dogs` add, then the redis cache is used and the application successfully deployed with all its components.
+
+    ![Azure Voting App](content/Helm13.jpg)
+
+- if `Cats` and `Dogs` add, then the redis cache is used and the application successfully deployed with all its components
+
+    ![Azure Voting App](content/Helm14.jpg)
 
 ### Uninstall the Application in AKS
 
-Uninstall the Helm chart release:
+- Uninstall the Helm chart release:
 
-`helm uninstall azure-vote-front`
+  `helm uninstall azure-vote-front`
 
-See all the deployed resources are cleared with:
-`kubectl get all`
+    ![Helm uninstall](content/Helm15.jpg)
+
+- See all the deployed resources are cleared with:
+
+  `kubectl get all`
+
+    ![Cleared resources](content/Helm16.jpg)
