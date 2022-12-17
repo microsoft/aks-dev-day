@@ -69,10 +69,10 @@ This Exercise demonstrates the use of a YAML file to create a pod declaratively.
 
 ### Task 1 - Create a Pod declaratively
 
-1. Change into the **Module1** folder
+1. Change into the **1.Intro** folder
 
 ```bash
-cd labs\1.Intro
+cd aks-dev-day/labs/1.Intro
 ```
 
 2. Use the YAML file provided to create a Pod.  You may want to open the **simple-pod.yaml** file and review its contents.
