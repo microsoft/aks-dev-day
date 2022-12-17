@@ -1,10 +1,10 @@
-# Lab Module 1: Core Kubernetes Concepts
+# Lab : Core Kubernetes Concepts
 
 > Estimated Duration: 60 minutes
 
 ## Module 1 Table of Contents
 
-[Exercise: Create a Basic Azure Kubernetes Service (AKS) Cluster](#exercise-create-a-basic-azure-kubernetes-service-aks-cluster)
+[Exercise: Setup your Azure subscription](#exercise-create-a-basic-azure-kubernetes-service-aks-cluster)
 
 [Exercise: Creating a Pod Declaratively](#exercise-creating-a-pod-declaratively)
 
@@ -15,8 +15,7 @@
 [Exercise: Cleanup](#exercise-cleanup)
 
 
-
-# Exercise: Create a Basic Azure Kubernetes Service (AKS) Cluster
+# Exercise: Setup your Azure subscription
 
 In this exercise you will create a simple AKS cluster.  In the next module, you'll create a more complete one.
 
@@ -54,87 +53,13 @@ az provider register --namespace Microsoft.ContainerService
 az provider register --namespace Microsoft.Kubernetes
 ```
 
-6. Search for and open the **Subscriptions** blade.  Select your **Azure Pass - Sponsorship** subscription.
+6. Search for and open the **Subscriptions** blade.  Select your subscription.
 
 7. Scroll down and select **Resource providers**.
 
 ![](content/azure-resources.png)
 
 8. Watch the progress of the registration process until all the providers listed above have been registered.  Click the *Refresh* button every few minutes to update the progess.  Once everything has been registered, continue with the tasks in this lab.
-
-
-
-### Task 2 - Define variables and create resource group
-
-1. Select the region closest to your location.  Use '**eastus**' for United States workshops, '**westeurope**' for European workshops.  Ask your instructor for other options in your region. Here are the names to use for the regions [eastus,westus,canadacentral,westeurope,centralindia,australiaeast]
-
-2. Define variables.
-
-```bash
-MY_INITIALS="lw"
-AKS_RESOURCE_GROUP="azure-$MY_INITIALS-rg"
-LOCATION="eastus"
-AKS_IDENTITY="identity-$MY_INITIALS"
-```
-
-3. Get list of available VM sizes with 2 cores in your region.
-
-```bash
-az vm list-sizes --location $LOCATION --query "[?numberOfCores == ``2``].{Name:name}" -o table
-```
-
-4. Set the VM SKU to one of the available values or use the default below.
-
-```bash
-VM_SKU="Standard_D2as_v5"
-```
-
-5. Create Resource Group.
-
-```bash
-az group create --location $LOCATION --resource-group $AKS_RESOURCE_GROUP
-```
-
-
-
-### Task 3 - Create a basic cluster using Azure CLI
-
-1. Define variables for AKS cluster.
-
-```bash
-AKS_NAME="aks-$MY_INITIALS"
-echo "AKS Cluster Name: $AKS_NAME"
-```
-
-2. Create a simple AKS cluster.
-
-```bash
-az aks create --node-count 2 --generate-ssh-keys --node-vm-size $VM_SKU --name $AKS_NAME --resource-group $AKS_RESOURCE_GROUP
-```
-
-> The creation process will take able 5-10 minutes.
-
-3. Once complete, connect the cluster to your local client machine.
-
-```bash
-az aks get-credentials --name $AKS_NAME --resource-group $AKS_RESOURCE_GROUP
-```
-
-4. Confirm the connection to the cluster.
-
-```bash
-kubectl get nodes
-```
-
-This should return a list of nodes similar to the one below:
-
-![](content/node-list.png)
-
-[Module 1 Table of Contents](#module-1-table-of-contents)
-
-[List of Modules](#modules-list)
-
-
 
 # Exercise: Creating a Pod Declaratively
 
@@ -147,7 +72,7 @@ This Exercise demonstrates the use of a YAML file to create a pod declaratively.
 1. Change into the **Module1** folder
 
 ```bash
-cd Module1
+cd labs\1.Intro
 ```
 
 2. Use the YAML file provided to create a Pod.  You may want to open the **simple-pod.yaml** file and review its contents.
@@ -220,12 +145,14 @@ code mypod.yaml
 
 **NOTE:** Observe all the properties that Kubernetes populated with default values when it saved the Pod definition to its database.
 
+### Task 4 - Delete the Pods
 
-[Module 1 Table of Contents](#module-1-table-of-contents)
+1. Delete the Pods that were created in this exercise.
 
-[List of Modules](#modules-list)
-
-
+```bash
+kubectl delete pod nginx-pod
+kubectl delete pod nginx-pod2
+```
 
 # Exercise: Working with Deployments
 
@@ -353,7 +280,7 @@ kubectl rollout undo deploy/ng-dep
 
 ### Task 5 - Delete the Deployment and Service
 
-1. Delete the Deployment and Service.
+1. Delete the Deployment and Service
 
 ```bash
 kubectl delete deployment ng-dep
@@ -361,12 +288,6 @@ kubectl delete service ng-svc
 ```
 
 **NOTE:** It may take a few minutes to delete the service because has to delete the Public IP resource in Azure.
-
-
-[Module 1 Table of Contents](#module-1-table-of-contents)
-
-[List of Modules](#modules-list)
-
 
 
 # Exercise: Working with Services
@@ -440,25 +361,11 @@ kubectl delete service sample-svc
 ```
 
 
-[Module 1 Table of Contents](#module-1-table-of-contents)
-
-[List of Modules](#modules-list)
-
-
 
 # Exercise: Cleanup
 
 
-### Task 1 - Delete the cluster
-
-When you're done working with the cluster, you can delete it if you wish.  DO NOTE DELETE THE CLUSTER IF YOU PLAN ON DOING OTHER LABS AFTER THIS.
-
-1. Deleting the cluster is as easy as creating it.
-
-```bash
-az aks delete --name $AKS_NAME  --resource-group $AKS_RESOURCE_GROUP
-```
+### Task 1 - Delete the rest of the Deployment(s), Service(s) and Pods
 
 
-[List of Modules](#modules-list)
 
