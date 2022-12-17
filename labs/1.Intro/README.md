@@ -362,10 +362,4 @@ kubectl delete service sample-svc
 
 
 
-# Exercise: Cleanup
-
-
-### Task 1 - Delete the rest of the Deployment(s), Service(s) and Pods
-
-
 
