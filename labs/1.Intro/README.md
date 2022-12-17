@@ -2,7 +2,7 @@
 
 > Estimated Duration: 60 minutes
 
-## Module 1 Table of Contents
+## Table of Contents
 
 [Exercise: Setup your Azure subscription](#exercise-create-a-basic-azure-kubernetes-service-aks-cluster)
 
