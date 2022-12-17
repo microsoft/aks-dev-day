@@ -114,3 +114,11 @@ In this task you will create the AKS Cluster linked to your Container Registry t
     ```
     ![get nodes](content/image-nodes.png)
 
+## Task 4: Clone the Git repository into your Cloud Shell environment
+
+Within your Cloud Shell window, running the following command:
+```bash
+    git clone https://github.com/microsoft/aks-dev-day.git
+    ls
+```
+You should see an **aks-dev-day** folder in your Cloud Shell window.
