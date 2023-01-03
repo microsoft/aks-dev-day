@@ -32,7 +32,7 @@ In this exercise you will create a simple AKS cluster.  In the next module, you'
 
    ![](content/bash.png)
 
-4. At this point, you are logged in to Azure automatically via Cloud Shell, but you need to make sure Cloud Shell is pointed to the correct subscription if you have multiple Azure subscriptions. Set the current subscription.Set the current subscription.
+4. At this point, you are logged in to Azure automatically via Cloud Shell, but you need to make sure Cloud Shell is pointed to the correct subscription if you have multiple Azure subscriptions. Set the current subscription. Your subscription name may be different.
 
 ```PowerShell
 az account set --subscription "Azure Pass - Sponsorship"
