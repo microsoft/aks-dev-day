@@ -63,13 +63,14 @@ Get the Ingress Controller Domain Name and copy to clipboard
 ``` bash
 az network public-ip show -g $ip_rg -n $ip_name --query dnsSettings.fqdn -o tsv
 ```
-> NOTE:</br>
-Your Domain Name will be different
->
 
 ![](content/image-getfgdn.png)
 
 Edit the ```ingress.yaml``` file and replace string **"[Replace]"** with your domain name from previous step 
+
+> ![](content/idea.png) **NOTE:**</br>
+Your Domain Name will be different than the one displayed here
+>
 
 ```bash 
 code ingress.yaml
@@ -83,7 +84,7 @@ create ingress rules
 kubectl apply -f ingress.yaml
 ```
 
-An incoming URL starting with <span style=color:blue>/blue</span> will be routed to the **blue-svc** service and a URL starting with <span style=color:red>/red</span> will be routed to the **red-svc**
+The Ingress defines rules so that an incoming URL starting with <span style=color:blue>/blue</span> will be routed to the **blue-svc** service and a URL starting with <span style=color:red>/red</span> will be routed to the **red-svc**
 
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -115,8 +116,6 @@ spec:
               number: 80
 ```
 
-
-
 View the new ingress resource and wait for the **ADDRESS** to appear. It can take a few minutes for the address to appear. 
 ```bash
 kubectl get ingress ingress-demo
@@ -126,8 +125,12 @@ kubectl get ingress ingress-demo
 Next, Open you local browser and navigate to the address under HOSTS and add **/blue** and **/red** to the URL
 
 For example: 
-1. ```http://askdevdays.eastus.cloudapp.azure.com/blue```
-2. ```http://askdevdays.eastus.cloudapp.azure.com/red```
+1. ```http://askdevdays1259.eastus.cloudapp.azure.com/blue```
+2. ```http://askdevdays1259.eastus.cloudapp.azure.com/red```
+
+> ![](content/idea.png) **NOTE:**</br>
+Your URL will be different than the one displayed here
+>
 
 ![](content/image-app-final.png)
 
