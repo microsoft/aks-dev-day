@@ -24,6 +24,7 @@ To perform this Lab, you'll need:
 We will clone the application locally and use the ACR to create and store its image:
 
 ```bash
+cd aks-dev-day/labs/2.Helm
 helmlab="helm-lab"
 mkdir "clouddrive/$helmlab" && cd "$_"
 git clone https://github.com/Azure-Samples/azure-voting-app-redis.git
