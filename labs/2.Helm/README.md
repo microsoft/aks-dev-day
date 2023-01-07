@@ -26,9 +26,9 @@ We will clone the application locally and use the ACR to create and store its im
 ```bash
 cd aks-dev-day/labs/2.Helm
 helmlab="helm-lab"
-mkdir "clouddrive/$helmlab" && cd "$_"
+mkdir "$helmlab" && cd "$_"
 git clone https://github.com/Azure-Samples/azure-voting-app-redis.git
-cd azure-voting-app-redis/azure-vote/
+cd azure-voting-app-redis/azure-vote
 ls -l
 ```
 
@@ -55,9 +55,7 @@ Generate the Helm chart for the app with:
 helm create azure-vote-front
 ```
 
-![Helm created](content/Helm3.jpg)
-
-This command creates a `azure-vote-front` folder with the Helm chart in it.
+This command creates an `azure-vote-front` folder with the Helm chart in it.
 
 Open the editor:
 
