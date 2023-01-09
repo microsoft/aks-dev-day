@@ -19,12 +19,17 @@ To perform this Lab, you'll need:
 
 ## Steps
 
+### Move in the Helm lab folder
+
+```bash
+cd aks-dev-day/labs/2.Helm
+```
+
 ### Prepare the application
 
 We will clone the application locally and use the ACR to create and store its image:
 
 ```bash
-cd aks-dev-day/labs/2.Helm
 helmlab="helm-lab"
 mkdir "$helmlab" && cd "$_"
 git clone https://github.com/Azure-Samples/azure-voting-app-redis.git
@@ -89,17 +94,23 @@ You will see the mix of Kubernetes YAML declarations, and sections surrounded by
         repository: https://charts.bitnami.com/bitnami
     ```
 
+    From:
+    ![Update dependencies](content/Helm6-1.jpg)
+
+    To:
+    ![Update dependencies](content/Helm6-2.jpg)
+
     Save the file and run:
 
     `helm dependency update azure-vote-front`
 
     Success looks like:
 
-    ![Update dependencies](content/Helm6.jpg)
+    ![Update dependencies](content/Helm6-3.jpg)
 
     Additionally, you will see a `redis-17.3.14.tgz` file added to the `charts/` folder:
 
-    ![Added dependency](content/Helm7.jpg)
+    ![Added dependency](content/Helm6-4.jpg)
 
 2. Update the `values.yaml` to set the defaults for the chart:
 
@@ -121,6 +132,7 @@ You will see the mix of Kubernetes YAML declarations, and sections surrounded by
 
       ```yaml
       replicaCount: 1
+
       backendName: azure-vote-backend-master
       redis:
         image:
@@ -132,12 +144,17 @@ You will see the mix of Kubernetes YAML declarations, and sections surrounded by
           enabled: false
 
       image:
-        repository: aksdevdays32296acr.azurecr.io/azure-vote-front
+        repository: aksdevdays31603acr.azurecr.io/azure-vote-front
         pullPolicy: IfNotPresent
+        # Overrides the image tag whose default is the chart appVersion.
         tag: "v1"
       ```
 
-      **Important Note**: see that the repository for the image (`image.repository`) uses our ACR server name: replace appropriately.
+      > **Important Notes**:
+
+      > - see that the repository for the image (`image.repository`) uses our ACR server name: replace appropriately.
+
+      > - if copying the `YAML`, careful with the spacing and indentation!
 
     - Change `service.type` to LoadBalancer:
 
@@ -156,7 +173,6 @@ You will see the mix of Kubernetes YAML declarations, and sections surrounded by
         type: LoadBalancer
         port: 80
       ```
-
 
 3. Update the `templates/deployment.yaml` to set the redis environment variable value:
 
