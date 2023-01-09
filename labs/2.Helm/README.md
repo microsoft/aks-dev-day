@@ -95,9 +95,11 @@ You will see the mix of Kubernetes YAML declarations, and sections surrounded by
     ```
 
     From:
+
     ![Update dependencies](content/Helm6-1.jpg)
 
     To:
+
     ![Update dependencies](content/Helm6-2.jpg)
 
     Save the file and run:
