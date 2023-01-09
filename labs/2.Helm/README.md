@@ -152,9 +152,9 @@ You will see the mix of Kubernetes YAML declarations, and sections surrounded by
         tag: "v1"
       ```
 
-      > **Important Notes**:
-      > - see that the repository for the image (`image.repository`) uses our ACR server name: replace appropriately.
-      > - if copying the `YAML`, careful with the spacing and indentation!
+      **Important Notes**:
+      - See that the repository for the image (`image.repository`) uses our ACR server name: replace appropriately.
+      - If copying the `YAML`, careful with the spacing and indentation!
 
     - Change `service.type` to LoadBalancer:
 
