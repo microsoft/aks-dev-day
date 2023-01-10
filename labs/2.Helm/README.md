@@ -66,7 +66,7 @@ Open the editor:
 
 ![Open editor](content/Helm4.jpg)
 
-Go in the folder `` and look at the content structure ([The Chart File Structure](https://helm.sh/docs/topics/charts/#the-chart-file-structure)).
+Go in the folder `azure-vote-front` and look at the content structure ([The Chart File Structure](https://helm.sh/docs/topics/charts/#the-chart-file-structure)).
 
 ![Chart structure](content/Helm5.jpg)
 
