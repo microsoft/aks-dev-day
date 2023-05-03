@@ -1,14 +1,10 @@
-# Project
+# Azure Kubernetes Service Dev Day
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+The Azure Kubernetes Service Dev Day labs include:
+1. A lab that covers basic Kubectl commands and setting up an AKS cluster
+2. A lab that covers deploying an application using Helm to an AKS cluster
+3. A lab that covers deploying an Ingress controller and resource to a an AKS cluster
 
-As the maintainer of this project, please make a few updates:
-
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
 
 ## Contributing
 
