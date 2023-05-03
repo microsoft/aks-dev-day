@@ -3,7 +3,7 @@
 The Azure Kubernetes Service Dev Day labs include:
 1. A lab that covers basic Kubectl commands and setting up an AKS cluster
 2. A lab that covers deploying an application using Helm to an AKS cluster
-3. A lab that covers deploying an Ingress controller and resource to a an AKS cluster
+3. A lab that covers deploying an Ingress controller and resource to an AKS cluster
 
 
 ## Contributing
