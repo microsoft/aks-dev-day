@@ -22,7 +22,7 @@ To perform this Lab, you'll need:
 ### Move in the Helm lab folder
 
 ```bash
-cd aks-dev-day/labs/2.Helm
+cd ../2.Helm
 ```
 
 ### Prepare the application
