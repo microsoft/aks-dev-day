@@ -19,7 +19,7 @@ If not already done, create an AKS Cluster according to the instructions found [
 
 Get the node resource group name for the AKS cluster created earlier
 ``` bash
-cd aks-dev-day/labs/3.Ingress
+cd ../3.Ingress
 ingress_dns=$aks_name
 ip_rg=$(az aks show -n $aks_name -g $rg --query nodeResourceGroup -o tsv)
 ip_name=$aks_name"-ip"
