@@ -63,7 +63,7 @@ In this task you will create the AKS Cluster linked to your Container Registry t
 
 1. Closing the cloud shell will remove the **aks_name** and **rg** variables. Save the output of the following command to restore the variables needed in later labs.
     ```bash
-    echo "aks_name="$aks_name;echo "rg="$rg;echo "acr_server="$acr_server
+    echo "aks_name="$aks_name;echo "rg="$rg;echo "acr_server="$acr_server;echo "acr_name="$acr_name
     ```
 ![](content/image-variables.png)
 
