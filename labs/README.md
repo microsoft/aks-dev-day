@@ -10,7 +10,6 @@ In this exercise you log into your Azure Subscription and launch the Bash [Azure
 
 1. [Launch Cloud Shell](https://shell.azure.com/bash)
 
-1. When prompted, Log into your Azure Subscription
 1. If this is your first time launching the Azure Cloud Shell, you will need to create a storage account.
 
     1. Choose Bash shell
@@ -24,6 +23,11 @@ In this exercise you log into your Azure Subscription and launch the Bash [Azure
     ![](content/image-3.png "Azure Cloud Shell Bash prompt")
     >![](content/idea.png) Use ***shift+insert*** to paste the commands from this document into the cloud shell terminal
 
+3. At this point, you are logged in to Azure automatically via Cloud Shell, but you need to make sure Cloud Shell is pointed to the correct subscription if you have multiple Azure subscriptions. Set the current subscription. Your subscription name may be different.
+
+```PowerShell
+az account set --subscription "Azure Pass - Sponsorship"
+```
 ## Task 2: Create Azure Container Registry
 In this task you will create an azure container registry and later link the registry to your Kubernetes cluster to easily and securely pull images.
 
